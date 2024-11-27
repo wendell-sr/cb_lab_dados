@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - "5000:5000"  # Porta para a API
+    stdin_open: true # Garante que o contêiner permaneça ativo
+    tty: true        # Força a interação contínua
