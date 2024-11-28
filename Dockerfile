@@ -11,7 +11,7 @@ WORKDIR /app
 COPY . /app
 
 # Instala as dependências necessárias usando pip, sem armazenar cache
-RUN pip install --no-cache-dir flask pandas requests
+RUN apt-get update && apt-get install -y curl && pip install --no-cache-dir flask pandas requests
 
 # Expõe a porta 5000 para acesso externo
 EXPOSE 5000 5001

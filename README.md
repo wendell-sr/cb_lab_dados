@@ -126,27 +126,27 @@ Criar e manipular uma estrutura de Data Lake para armazenar os dados de 5 endpoi
   python src/desafio_2/manipular_data_lake.py
   ```
 
-- **Endpoints Disponíveis**:
+- **Endpoints Disponíveis (Exemplo)**:
   1. **Consultar dados**:
      ```bash
-     curl "http://127.0.0.1:5000/api/data-lake?storeId=001&date=2024-11-25&endpoint=getGuestChecks"
+     curl "http://127.0.0.1:5001/api/data-lake?storeId=001&date=2024-11-25&endpoint=getGuestChecks"
      ```
 
   2. **Atualizar dados**:
      ```bash
-     curl -X POST "http://127.0.0.1:5000/api/data-lake" \
+     curl -X POST "http://127.0.0.1:5001/api/data-lake" \
           -H "Content-Type: application/json" \
           -d '{"storeId": "001", "date": "2024-11-25", "endpoint": "getGuestChecks", "data": [{"id": 3, "subtotal": 150.0, "total": 180.0}]}'
      ```
 
   3. **Excluir dados**:
      ```bash
-     curl -X DELETE "http://127.0.0.1:5000/api/data-lake?storeId=001&date=2024-11-25&endpoint=getGuestChecks"
+     curl -X DELETE "http://127.0.0.1:5001/api/data-lake?storeId=001&date=2024-11-25&endpoint=getGuestChecks"
      ```
 
   4. **Buscar e filtrar dados**:
      ```bash
-     curl "http://127.0.0.1:5000/api/search?storeId=001&date=2024-11-25&endpoint=getGuestChecks&key=id&value=1"
+     curl "http://127.0.0.1:5001/api/search?storeId=001&date=2024-11-25&endpoint=getGuestChecks&key=id&value=1"
      ```
 
 ---
