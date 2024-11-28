@@ -156,7 +156,7 @@ Criar e manipular uma estrutura de Data Lake para armazenar os dados de 5 endpoi
 
 3. Acessar o container:
    ```bash
-   docker exec -it cb_lab_dados-app-1 sh
+   docker exec -it cb_lab_dados-app sh
    ```
 
 ---
