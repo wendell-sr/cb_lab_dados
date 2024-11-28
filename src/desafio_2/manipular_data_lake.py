@@ -60,7 +60,6 @@ def update_data_lake():
 
     return jsonify({"message": f"Dados salvos em {file_path}"})
 
-
 @app.route("/api/data-lake", methods=["DELETE"])
 def delete_data_lake():
     """
@@ -122,4 +121,4 @@ def search_data_lake():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)

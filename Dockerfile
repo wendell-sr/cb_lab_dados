@@ -11,10 +11,10 @@ WORKDIR /app
 COPY . /app
 
 # Instala as dependências necessárias usando pip, sem armazenar cache
-RUN pip install --no-cache-dir flask pandas
+RUN pip install --no-cache-dir flask pandas requests
 
 # Expõe a porta 5000 para acesso externo
-EXPOSE 5000
+EXPOSE 5000 5001
 
 # Define o comando padrão a ser executado quando o container iniciar
 CMD ["python3"]

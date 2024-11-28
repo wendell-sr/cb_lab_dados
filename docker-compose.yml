@@ -10,4 +10,5 @@ services:
       - .:/app  # Monta o diretório atual no contêiner
     ports:
       - "5000:5000"  # Porta exposta para APIs ou outros serviços
+      - "5001:5001"  # Adiciona a porta 5001
     command: ["tail", "-f", "/dev/null"]  # Garante que o contêiner fique ativo sem executar scripts
