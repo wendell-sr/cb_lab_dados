@@ -42,6 +42,7 @@ CB_LAB_DADOS/
 |— docker-compose.yml          # Configuração do Docker Compose
 |— Dockerfile                  # Configuração do container Docker
 |— README.md                   # Documentação do projeto
+|— respostas_do_desafio.md     # Respostas as perguntas presentes no documento do desafio
 ```
 
 ---
