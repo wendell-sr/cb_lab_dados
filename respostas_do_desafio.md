@@ -169,49 +169,6 @@ Se o campo `guestChecks.taxes` fosse renomeado para `guestChecks.taxation`, os s
   taxas = item.get("taxation") or item.get("taxes")
   ```
 
-- **Banco de Dados**: Atualizar a tabela `taxas`:
-
-  ```
-  sql
-  ALTER TABLE taxas RENAME COLUMN taxes TO taxation;
-  ```
-
 - **Data Lake**: Reprocessar arquivos antigos para refletir o novo nome.
 
 ------
-
-## **Como rodar o projeto**
-
-1. **Subir o ambiente com Docker:**
-
-   ```
-   bash
-   docker-compose up
-   ```
-
-2. **Simular as APIs:**
-
-   ```
-   bash
-   python src/desafio_2/simular_api.py
-   ```
-
-3. **Criar o Data Lake:**
-
-   ```
-   bash
-   python src/desafio_2/criar_data_lake_respostas_api.py
-   ```
-
-4. **Consultar o Data Lake:**
-
-   ```
-   bash
-   python src/desafio_2/manipular_data_lake.py
-   ```
-
-------
-
-## **Conclusão**
-
-O projeto aborda a solução de maneira escalável, modular e com foco em boas práticas. A estrutura relacional facilita análises de dados no contexto de restaurantes, enquanto o Data Lake permite a integração de dados para inteligência de negócios.
