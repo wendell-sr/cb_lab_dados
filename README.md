@@ -1,175 +1,167 @@
-# Projeto: Desafio Engenharia de Dados
-
-Este repositório contém a solução para o desafio de engenharia de dados, que aborda o armazenamento, organização e consulta de dados de uma cadeia de restaurantes. A solução está dividida em dois desafios: modelagem de dados e construção de um Data Lake. Aqui, detalhamos todas as etapas e justificativas.
+# Documentação do Projeto CB_LAB_DADOS
 
 ## Estrutura do Projeto
 
-cb_lab_dados/
-├─├─ data/                     # Arquivos de dados de entrada
-├─├─ data_lake/               # Data Lake estruturado por loja, data e endpoint
-├─├─ raw/
-├─├─├─ 001/
-├─├─├─├─ 2024-11-26/
-├─├─├─├─├─ getGuestChecks.json
-├─├─├─├─├─ getFiscalInvoice.json
-├─├─├─├─├─ ...
-├─├─ src/                     # Códigos fonte
-├─├─├─ simulate_api_responses.py  # Simulação de dados das APIs
-├─├─├─ api.py                  # API para consultas ao Data Lake
-├─├─├─ data_lake_manager.py     # Gerenciamento do Data Lake
-├─├─├─ initialize_database.py   # Inicialização de banco de dados SQLite
-├─├─ README.md               # Documentação do projeto
-├─├─ docker-compose.yml      # Configuração do Docker Compose
-├─├─ Dockerfile             # Dockerfile para execução
-├─├─ cb_lab_dados             # Arquivo de banco de dados gerado a partir do ERP.json
+```
+CB_LAB_DADOS/
+|— data/                       # Dados de entrada e banco gerado
+|   |— ERP.json                # Arquivo JSON principal para inicializar o banco
+|   |— restaurante.sqlite      # Banco de dados SQLite gerado
+|   |— manualTabelas.md       # Manual de descrição das tabelas
+|— data_lake/                 # Estrutura do Data Lake
+|   |— raw/                   # Dados brutos organizados
+|       |— 001/               # Loja 001
+|           |— 2024-11-25/    # Dados do dia
+|               |— getGuestChecks.json
+|               |— getTransactions.json
+|               |— getFiscalInvoice.json
+|               |— getChargeBack.json
+|               |— getCashManagementDetails.json
+|— src/                        # Scripts do projeto
+|   |— desafio_1/             # Scripts relacionados ao Desafio 1
+|       |— inicializar_banco.py   # Inicializa o banco a partir do ERP.json
+|   |— desafio_2/             # Scripts relacionados ao Desafio 2
+|       |— criar_data_lake_respostas_api.py  # Cria o Data Lake consumindo a API
+|       |— manipular_data_lake.py            # Manipulações no Data Lake
+|       |— simular_api.py                   # Simula a API com os 5 endpoints
+|— docker-compose.yml          # Configuração do Docker Compose
+|— Dockerfile                  # Configuração do container Docker
+|— README.md                   # Documentação do projeto
 ```
 
-## Desafio 1: Modelagem e Banco de Dados
+---
 
-### Contexto
-A resposta de uma API de ERP, representada pelo arquivo `ERP.json`, contém dados de pedidos (guestCheckId), itens (guestCheckLineItemId) e outros objetos (menuItem, discounts, etc.). A solução exige transcrição para tabelas SQL, considerando operações de restaurante.
+## Desafio 1: Banco de Dados
 
-### Etapas Implementadas
+### **Objetivo**
 
-1. **Modelagem do Esquema JSON:**
-   - **Tabela `guest_checks`:** Armazena os dados do pedido principal.
-   - **Tabela `detail_lines`:** Contém os itens, descontos, taxas e pagamentos associados ao pedido.
+Inicializar um banco de dados SQLite a partir do arquivo `ERP.json`, criando tabelas organizadas e relacionando os dados conforme descrito no manual.
 
-2. **Transformação para Tabelas SQL:**
-   Utilizamos o script `initialize_database.py` para processar o JSON e popular tabelas em um banco SQLite.
+### **Tabela Criadas**
 
-3. **Abordagem:**
-   - A modelagem reflete o funcionamento de um restaurante.
-   - Normalização de dados para facilitar consultas e integrações futuras.
+1. **Contas**:
+   - Armazena as informações das contas abertas por clientes.
+   - **Colunas**: id_conta, num_conta, data_abertura, subtotal, total.
 
-### Execução
-Para executar a inicialização do banco de dados:
+2. **Itens Detalhados**:
+   - Detalha os itens do menu que fazem parte de uma conta.
+   - **Colunas**: id_item, id_conta (FK), nome_item, preco.
 
-```bash
-docker exec -it cb_lab_dados-app-1 python src/initialize_database.py
-```
+3. **Taxas**:
+   - Registra as taxas aplicadas sobre os itens ou contas.
+   - **Colunas**: id_taxa, descricao_taxa, valor_taxa.
 
-## Desafio 2: Data Lake e APIs
+4. **Menu**:
+   - Armazena informações gerais dos itens do menu.
+   - **Colunas**: id_menu, nome_item, preco_base, ativo.
 
-### Contexto
-A solução deve armazenar as respostas das APIs no Data Lake e fornecer uma API para consultas.
+### **Execução**
 
-#### Endpoints das APIs
-- **POST /bi/getFiscalInvoice**
-- **POST /res/getGuestChecks**
-- **POST /org/getChargeBack**
-- **POST /trans/getTransactions**
-- **POST /inv/getCashManagementDetails**
+1. Inicializar o banco de dados:
+   ```bash
+   python src/desafio_1/inicializar_banco.py
+   ```
 
-Cada endpoint retorna dados no formato JSON para uma loja (`storeId`) em uma data (`busDt`).
+2. Resultado esperado:
+   - Arquivo gerado: `data/restaurante.sqlite`
 
-### Estrutura do Data Lake
+3. Consultar o banco:
+   - Use ferramentas como **DB Browser for SQLite** para visualizar os dados.
 
-Organização escolhida: **Loja > Data > Endpoint**
+---
 
-**Justificativa:**
-- Facilita a segmentação por loja e acesso aos dados diários.
-- Cada endpoint gera um arquivo JSON por loja e data, permitindo manipulação e análise rápidas.
+## Desafio 2: Data Lake
 
-Exemplo:
+### **Objetivo**
 
-```plaintext
-data_lake/
-├─ raw/
-    ├─ 001/
-        ├─ 2024-11-25/
-        ├─├─ getGuestChecks.json
-        ├─├─ getFiscalInvoice.json
-        ├─├─ ...
-```
+Criar e manipular uma estrutura de Data Lake para armazenar os dados de 5 endpoints simulados:
 
-### Simulação de APIs
+- **getGuestChecks**
+- **getTransactions**
+- **getFiscalInvoice**
+- **getChargeBack**
+- **getCashManagementDetails**
 
-O script `simulate_api_responses.py` gera os dados das APIs para **3 dias** (25, 26 e 27 de novembro) e organiza no Data Lake conforme a estrutura definida.
+### **Fluxo de Execução**
 
-#### Execução:
+#### 1. Simular API
 
-```bash
-docker exec -it cb_lab_dados-app-1 python src/simulate_api_responses.py
-```
+- Inicialize a API simulada para fornecer dados dos endpoints:
+  ```bash
+  python src/desafio_2/simular_api.py
+  ```
 
-### Consulta ao Data Lake
+#### 2. Criar o Data Lake
 
-Uma API foi implementada no arquivo `api.py` para consultar os dados no Data Lake.
+- Consuma os endpoints e organize os dados na estrutura do Data Lake:
+  ```bash
+  python src/desafio_2/criar_data_lake_respostas_api.py
+  ```
 
-#### Execução do Contêiner:
+- Arquivos gerados em:
+  ```
+  data_lake/raw/{storeId}/{date}/{endpoint}.json
+  ```
 
-```bash
-docker-compose up
-```
+#### 3. Manipular Data Lake
 
-#### Exemplos de Consulta:
-- Consultar `getGuestChecks` para a loja `001` na data `2024-11-26`:
+- API para manipular e consultar os dados do Data Lake:
+  ```bash
+  python src/desafio_2/manipular_data_lake.py
+  ```
 
-```bash
-curl "http://localhost:5000/api/data-lake?storeId=001&date=2024-11-26&endpoint=getGuestChecks"
-```
+- **Endpoints Disponíveis**:
+  1. **Consultar dados**:
+     ```bash
+     curl "http://127.0.0.1:5000/api/data-lake?storeId=001&date=2024-11-25&endpoint=getGuestChecks"
+     ```
 
-**Resposta:**
+  2. **Atualizar dados**:
+     ```bash
+     curl -X POST "http://127.0.0.1:5000/api/data-lake" \
+          -H "Content-Type: application/json" \
+          -d '{"storeId": "001", "date": "2024-11-25", "endpoint": "getGuestChecks", "data": [{"id": 3, "subtotal": 150.0, "total": 180.0}]}'
+     ```
 
-```json
-{
-    "endpoint": "getGuestChecks",
-    "storeId": "001",
-    "busDt": "2024-11-26",
-    "data": {
-        "description": "Guest checks data",
-        "example_field": "Data from getGuestChecks for store 001",
-        "store_info": {
-            "store_id": "001",
-            "date": "2024-11-26"
-        }
-    }
-}
-```
+  3. **Excluir dados**:
+     ```bash
+     curl -X DELETE "http://127.0.0.1:5000/api/data-lake?storeId=001&date=2024-11-25&endpoint=getGuestChecks"
+     ```
 
-### Considerações sobre Alterações de Schema
+  4. **Buscar e filtrar dados**:
+     ```bash
+     curl "http://127.0.0.1:5000/api/search?storeId=001&date=2024-11-25&endpoint=getGuestChecks&key=id&value=1"
+     ```
 
-Se o esquema de uma API mudar (ex.: `guestChecks.taxes` renomeado para `guestChecks.taxation`):
+---
 
-1. Atualize os scripts de transformação (ex.: `simulate_api_responses.py`) para refletir as novas chaves.
-2. Utilize logs e validação para identificar e corrigir inconsistências.
-3. Documente a alteração para que futuras consultas estejam alinhadas ao novo formato.
+## Docker
 
-## Configuração do Ambiente
+### **Configuração**
 
-O projeto está configurado para execução em contêiner Docker.
+- **Dockerfile**: Configuração do container para executar os scripts do projeto.
+- **docker-compose.yml**: Configuração do ambiente com suporte a Flask e SQLite.
 
-### Build do Contêiner
+### **Comandos**
 
-```bash
-docker-compose build
-```
+1. Construir a imagem:
+   ```bash
+   docker-compose build
+   ```
 
-### Início do Contêiner
+2. Iniciar o container:
+   ```bash
+   docker-compose up
+   ```
 
-```bash
-docker-compose up
-```
+3. Acessar o container:
+   ```bash
+   docker exec -it cb_lab_dados-app-1 sh
+   ```
 
-### Testes no Contêiner
+---
 
-Acesse o contêiner:
+## Considerações Finais
 
-```bash
-docker exec -it cb_lab_dados-app-1 sh
-```
-
-### Conclusão
-
-A estrutura e implementação propostas atendem integralmente aos requisitos definidos nos desafios 1 e 2, fornecendo uma solução escalável e flexível para a simulação e manipulação de dados em um Data Lake. A arquitetura do projeto foi concebida para suportar diferentes cenários de uso, como a simulação de respostas de APIs, organização de dados no Data Lake, consultas através de uma API REST, e visualização dos dados gerados.
-
-
-
-O projeto foi amplamente testado com diferentes combinações de parâmetros e comporta-se conforme o esperado, garantindo que os dados sejam acessíveis para análise e processamento futuro. Além disso, a documentação foi aprimorada, oferecendo orientações claras sobre a execução e utilização do sistema.
-
-
-Este projeto demonstrou a capacidade de lidar com cenários complexos de processamento e organização de dados, oferecendo uma base sólida para expansão futura e integração em sistemas de maior escala.
-
-
+Este projeto foi estruturado para atender às necessidades dos dois desafios, promovendo uma separação clara entre banco de dados e manipulação de Data Lake. Ele é flexível e pode ser facilmente adaptado para novos requisitos.
 

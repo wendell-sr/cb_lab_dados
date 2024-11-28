@@ -1,0 +1,16 @@
+{
+    "date": "2024-11-27",
+    "storeId": "001",
+    "transactions": [
+        {
+            "amount": 120.0,
+            "id": 1,
+            "method": "cash"
+        },
+        {
+            "amount": 240.0,
+            "id": 2,
+            "method": "card"
+        }
+    ]
+}

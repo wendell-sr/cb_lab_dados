@@ -1,23 +1,14 @@
-FROM python:3.9-slim
+# Usar uma imagem Python como base
+FROM python:3.11-slim
 
-# Diretório de trabalho no contêiner
+# Definir diretório de trabalho
 WORKDIR /app
 
-# Instalar dependências do sistema, SQLite CLI e cURL
-RUN apt-get update && apt-get install -y \
-    sqlite3 \
-    curl \
-    && apt-get clean
+# Copiar os arquivos do projeto
+COPY . .
 
-# Instalar dependências do Python
-RUN pip install --no-cache-dir pandas flask
+# Instalar dependências do projeto
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar o código do projeto
-COPY src/ src/
-COPY data/ data/
-
-# Configurar o PYTHONPATH
-ENV PYTHONPATH=/app
-
-# Manter o contêiner ativo e executar os serviços
-CMD ["sh", "-c", "python src/initialize_database.py && python src/api.py && tail -f /dev/null"]
+# Comando padrão para manter o contêiner ativo
+CMD ["tail", "-f", "/dev/null"]

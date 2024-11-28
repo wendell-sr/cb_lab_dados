@@ -1,0 +1,16 @@
+{
+    "cashManagement": [
+        {
+            "cashIn": 500.0,
+            "cashOut": 200.0,
+            "id": 1
+        },
+        {
+            "cashIn": 700.0,
+            "cashOut": 300.0,
+            "id": 2
+        }
+    ],
+    "date": "2024-11-27",
+    "storeId": "001"
+}

@@ -1,0 +1,16 @@
+{
+    "date": "2024-11-26",
+    "guestChecks": [
+        {
+            "id": 1,
+            "subtotal": 100.0,
+            "total": 120.0
+        },
+        {
+            "id": 2,
+            "subtotal": 200.0,
+            "total": 240.0
+        }
+    ],
+    "storeId": "002"
+}

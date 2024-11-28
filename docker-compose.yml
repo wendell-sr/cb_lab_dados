@@ -1,12 +1,13 @@
-version: "3.9"
+version: "3.11"
+
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: cb_lab_dados-app
     volumes:
       - .:/app
     ports:
-      - "5000:5000"  # Porta para a API
-    stdin_open: true # Garante que o contêiner permaneça ativo
-    tty: true        # Força a interação contínua
+      - "5000:5000"  # Porta exposta para APIs ou outros serviços
+    command: ["tail", "-f", "/dev/null"]  # Garante que o contêiner fique ativo sem executar scripts

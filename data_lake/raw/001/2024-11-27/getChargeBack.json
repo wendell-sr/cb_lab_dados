@@ -1,0 +1,16 @@
+{
+    "chargeBacks": [
+        {
+            "amount": -50.0,
+            "id": 1,
+            "reason": "Duplicate transaction"
+        },
+        {
+            "amount": -30.0,
+            "id": 2,
+            "reason": "Customer dispute"
+        }
+    ],
+    "date": "2024-11-27",
+    "storeId": "001"
+}
