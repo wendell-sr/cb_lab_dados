@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: cb_lab_dados-app
     volumes:
-      - .:/app
+      - .:/app  # Monta o diretório atual no contêiner
     ports:
       - "5000:5000"  # Porta exposta para APIs ou outros serviços
     command: ["tail", "-f", "/dev/null"]  # Garante que o contêiner fique ativo sem executar scripts

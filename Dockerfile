@@ -1,14 +1,20 @@
-# Usar uma imagem Python como base
+# Usa a imagem base do Python 3.11 slim
 FROM python:3.11-slim
 
-# Definir diretório de trabalho
+# Define a variável de ambiente para que a saída do Python não seja armazenada em buffer
+ENV PYTHONUNBUFFERED=1
+
+# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copiar os arquivos do projeto
-COPY . .
+# Copia todos os arquivos do diretório atual para o diretório de trabalho no container
+COPY . /app
 
-# Instalar dependências do projeto
-RUN pip install --no-cache-dir -r requirements.txt
+# Instala as dependências necessárias usando pip, sem armazenar cache
+RUN pip install --no-cache-dir flask pandas
 
-# Comando padrão para manter o contêiner ativo
-CMD ["tail", "-f", "/dev/null"]
+# Expõe a porta 5000 para acesso externo
+EXPOSE 5000
+
+# Define o comando padrão a ser executado quando o container iniciar
+CMD ["python3"]
