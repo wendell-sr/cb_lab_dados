@@ -1,5 +1,20 @@
 # Documentação do Projeto CB_LAB_DADOS
 
+## Introdução
+
+Este projeto foi desenvolvido para resolver o desafio do CBLAB relacionado à engenharia de dados. Ele consiste em duas partes principais:
+
+1. **Desafio 1**: Estruturar um banco de dados a partir de um arquivo JSON.
+2. **Desafio 2**: Estruturar um Data Lake, simular APIs, e implementar uma API para consultas e manipulação.
+
+## Tecnologias Utilizadas
+
+- **Python**: Manipulação de dados, criação de APIs e scripts.
+- **SQLite**: Banco de dados relacional para persistência dos dados.
+- **Flask**: Framework para criação de APIs.
+- **Docker**: Ambiente isolado para execução dos scripts.
+- **Markdown**: Documentação.
+
 ## Estrutura do Projeto
 
 ```
